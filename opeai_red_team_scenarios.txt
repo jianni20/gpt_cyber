@@ -1,0 +1,65 @@
+Name:Linux and Mac File and Directory Permissions Modification
+Summary:Adversaries may modify file or directory permissions/attributes to evade access control lists (ACLs) and access protected files.(Citation: Hybrid Analysis Icacls1 June 2018)(Citation: Hybrid Analysis Icacls2 May 2018) File and directory permissions are commonly managed by ACLs configured by the file or directory owner, or users with the appropriate permissions. File and directory ACL implementations vary by platform, but generally explicitly designate which users or groups can perform which actions (read, write, execute, etc.).
+
+Most Linux and Linux-based platforms provide a standard set of permission groups (user, group, and other) and a standard set of permissions (read, write, and execute) that are applied to each group. While nuances of each platform’s permissions implementation may vary, most of the platforms provide two primary commands used to manipulate file and directory ACLs: <code>chown</code> (short for change owner), and <code>chmod</code> (short for change mode).
+
+Adversarial may use these commands to make themselves the owner of files and directories or change the mode if current permissions allow it. They could subsequently lock others out of the file. Specific file and directory modifications may be a required step for many techniques, such as establishing Persistence via [Unix Shell Configuration Modification](https://attack.mitre.org/techniques/T1546/004) or tainting/hijacking other instrumental binary/configuration files via [Hijack Execution Flow](https://attack.mitre.org/techniques/T1574).(Citation: 20 macOS Common Tools and Techniques) 
+Example Scenario and TTP Chain:Scenario: 
+An advanced persistent threat (APT) group has gained initial access to a Linux server within a corporate network. The group's objective is to establish persistence and maintain long-term access to the compromised system to exfiltrate sensitive data. The group decides to leverage the 'Linux and Mac File and Directory Permissions Modification' technique to evade detection and maintain control over the server.
+
+TTP Chain:
+
+1. Initial Access (T1566):
+The APT group initially gains access to the Linux server through a targeted phishing email containing a malicious attachment that exploits a known vulnerability in a software used by the server.
+
+2. Linux and Mac File and Directory Permissions Modification (T1222):
+Once the APT group gains access to the server, they identify critical files and directories that they need to maintain control over to achieve their objectives. They use the 'chown' and 'chmod' commands to modify file and directory permissions, making themselves the owner of these files and restricting access to other users.
+
+3. Unix Shell Configuration Modification (T1546.004):
+As part of their persistence strategy, the APT group modifies the shell configuration files on the server to ensure that their malicious code runs every time a user logs in. By manipulating these configuration files, they can maintain access to the server even if the system is rebooted.
+
+4. Hijack Execution Flow (T1574):
+To further solidify their control over the compromised server, the APT group hijacks the execution flow of critical binaries and configuration files. By modifying the permissions of these files, they can manipulate the execution path to run their malicious code instead of legitimate processes, evading detection by security mechanisms.
+
+By combining these tactics, techniques, and procedures (TTPs), the APT group successfully establishes persistence on the Linux server, maintains access, and exfiltrates sensitive data from the network over an extended period without arousing suspicion.
+--------------------------------------------------
+Name:Timestomp
+Summary:Adversaries may take actions to hide the deployment of new, or modification of existing files to obfuscate their activities. Timestomping is a technique that modifies the timestamps of a file (the modify, access, create, and change times), often to mimic files that are in the same folder. This is done, for example, on files that have been modified or created by the adversary so that they do not appear conspicuous to forensic investigators or file analysis tools. Timestomping may be used along with file name [Masquerading](https://attack.mitre.org/techniques/T1036) to hide malware and tools. (Citation: WindowsIR Anti-Forensic Techniques)
+Example Scenario and TTP Chain:Scenario: 
+An advanced threat actor group known for conducting sophisticated cyber espionage campaigns has successfully compromised a high-profile government agency's network. The threat actors have gained persistent access to the network and are exfiltrating sensitive data without being detected. To cover their tracks and avoid detection by forensic investigators, the threat actors decide to use the Timestomp technique to manipulate file timestamps.
+
+TTP Chain:
+1. Initial Access (T1190): The threat actors gain initial access to the government agency's network through a spear-phishing email containing a malicious attachment that exploits a vulnerability in the email client.
+   
+2. Execution (T1059): Once inside the network, the threat actors deploy a custom-built backdoor that establishes a command and control (C2) channel to their external infrastructure.
+
+3. Defense Evasion (T1562): To evade detection by security tools and forensic investigators, the threat actors use the Timestomp technique to modify the timestamps of files associated with their backdoor and exfiltrated data. By adjusting the timestamps of these files to match legitimate files in the same directory, the threat actors make their activities appear less suspicious.
+
+4. Exfiltration (T1041): The threat actors exfiltrate sensitive documents, including classified government information, using the compromised network's legitimate communication channels. They ensure that the exfiltrated files' timestamps have been manipulated using the Timestomp technique to avoid raising suspicion.
+
+5. Command and Control (T1043): The threat actors maintain control over their backdoor and ongoing operations through the C2 channel, allowing them to execute additional commands, exfiltrate data, and receive instructions from their remote operators.
+
+By combining the Timestomp technique with other tactics, techniques, and procedures (TTPs) such as initial access, execution, defense evasion, exfiltration, and command and control, the threat actors are able to conduct a stealthy and persistent cyber espionage campaign against the government agency while remaining undetected.
+--------------------------------------------------
+Name:Password Cracking
+Summary:Adversaries may use password cracking to attempt to recover usable credentials, such as plaintext passwords, when credential material such as password hashes are obtained. [OS Credential Dumping](https://attack.mitre.org/techniques/T1003) can be used to obtain password hashes, this may only get an adversary so far when [Pass the Hash](https://attack.mitre.org/techniques/T1550/002) is not an option. Further,  adversaries may leverage [Data from Configuration Repository](https://attack.mitre.org/techniques/T1602) in order to obtain hashed credentials for network devices.(Citation: US-CERT-TA18-106A) 
+
+Techniques to systematically guess the passwords used to compute hashes are available, or the adversary may use a pre-computed rainbow table to crack hashes. Cracking hashes is usually done on adversary-controlled systems outside of the target network.(Citation: Wikipedia Password cracking) The resulting plaintext password resulting from a successfully cracked hash may be used to log into systems, resources, and services in which the account has access.
+Example Scenario and TTP Chain:Scenario: A threat actor gains access to a company's network through a phishing campaign and successfully compromises a system within the network. The threat actor performs OS Credential Dumping on the compromised system, retrieving password hashes stored on the system. However, due to security measures in place, Pass the Hash technique is not viable in this case. 
+
+TTP Chain:
+
+1. Initial Access: The threat actor gains initial access to the company's network through a phishing email that delivers a malicious payload.
+   
+2. Lateral Movement: Once inside the network, the threat actor moves laterally to a target system using common techniques such as Remote Desktop Protocol (RDP) or PowerShell to compromise additional systems.
+   
+3. OS Credential Dumping (T1003): The threat actor executes tools like Mimikatz to dump password hashes from the compromised system. This technique allows the threat actor to obtain hashed credentials that can be cracked offline.
+   
+4. Password Cracking: The threat actor uses password cracking tools or pre-computed rainbow tables to systematically guess passwords corresponding to the obtained password hashes.
+   
+5. Credential Access: Upon successfully cracking a password hash, the threat actor obtains the plaintext password and uses it to log into systems, resources, and services within the network where the compromised account has access.
+   
+6. Data from Configuration Repository (T1602): In parallel, the threat actor leverages data from the Configuration Repository to obtain additional hashed credentials for network devices, further expanding their access within the network.
+
+By following this TTP chain, the threat actor can escalate privileges, move laterally, and gain persistent access to critical resources within the targeted network, potentially leading to data exfiltration or other malicious activities.
+--------------------------------------------------

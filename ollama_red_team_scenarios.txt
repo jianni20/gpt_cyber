@@ -1,0 +1,106 @@
+Name:Windows Management Instrumentation
+Summary:Adversaries may abuse Windows Management Instrumentation (WMI) to execute malicious commands and payloads. WMI is designed for programmers and is the infrastructure for management data and operations on Windows systems.(Citation: WMI 1-3) WMI is an administration feature that provides a uniform environment to access Windows system components.
+
+The WMI service enables both local and remote access, though the latter is facilitated by [Remote Services](https://attack.mitre.org/techniques/T1021) such as [Distributed Component Object Model](https://attack.mitre.org/techniques/T1021/003) and [Windows Remote Management](https://attack.mitre.org/techniques/T1021/006).(Citation: WMI 1-3) Remote WMI over DCOM operates using port 135, whereas WMI over WinRM operates over port 5985 when using HTTP and 5986 for HTTPS.(Citation: WMI 1-3) (Citation: Mandiant WMI)
+
+An adversary can use WMI to interact with local and remote systems and use it as a means to execute various behaviors, such as gathering information for [Discovery](https://attack.mitre.org/tactics/TA0007) as well as [Execution](https://attack.mitre.org/tactics/TA0002) of commands and payloads.(Citation: Mandiant WMI) For example, `wmic.exe` can be abused by an adversary to delete shadow copies with the command `wmic.exe Shadowcopy Delete` (i.e., [Inhibit System Recovery](https://attack.mitre.org/techniques/T1490)).(Citation: WMI 6)
+
+**Note:** `wmic.exe` is deprecated as of January of 2024, with the WMIC feature being “disabled by default” on Windows 11+. WMIC will be removed from subsequent Windows releases and replaced by [PowerShell](https://attack.mitre.org/techniques/T1059/001) as the primary WMI interface.(Citation: WMI 7,8) In addition to PowerShell and tools like `wbemtool.exe`, COM APIs can also be used to programmatically interact with WMI via C++, .NET, VBScript, etc.(Citation: WMI 7,8)
+Example Scenario and TTP Chain:Here's an example scenario and TTP (Tactics, Techniques, and Procedures) chain demonstrating the use of Windows Management Instrumentation (WMI):
+
+**Scenario:** An attacker has already gained initial access to a Windows 10 system through a phishing email that delivered a malicious Office document. The attacker has escalated privileges using the `mimikatz` tool.
+
+**TTP Chain:**
+
+1. **Initial Access**: The attacker sends a phishing email with a malicious Office document attachment, which is opened by an unsuspecting user. The document contains a macro that downloads and executes a PowerShell script, giving the attacker initial access.
+2. **Privilege Escalation**: Using `mimikatz`, the attacker escalates privileges to gain SYSTEM-level access.
+
+**WMI-based Attack:**
+
+3. **Discovery**: The attacker uses WMI to gather information about the system, including installed software and services. This is achieved by running a command like `wmic. exe path` to list all executables on the system.
+4. **Execution**: The attacker uses WMI to execute malicious commands and payloads. For example, they can use the `wmic. exe Shadowcopy Delete` command to delete shadow copies (System Restore points) using the `wbemtool. exe` tool.
+
+**Example Command:** `wmic. exe /namespace:\\root\cimv2 path Win32_ComputerSystem Get UserName`
+
+This command uses WMI to retrieve the username of the current user, which can be useful for an attacker looking to maintain persistence or gather information about the system.
+
+**WMI-based Persistence:**
+
+5. **Persistence**: The attacker creates a new service using WMI that runs under the SYSTEM context. This is achieved by creating a new CIM (Common Information Model) instance and setting its `StartMode` property to `AutoStart`.
+6. **Command Execution**: The attacker uses WMI to execute commands on the system, such as deleting files or modifying registry keys.
+
+**Example Command:** `wmic. exe /namespace:\\root\cimv2 path Win32_Process Create CommandLine="cmd.exe /c del C:\Windows\System32\file.txt"`
+
+This command creates a new process using WMI that executes the `del` command to delete a file on the system.
+
+**Detection**: To detect this attack, security tools can monitor for suspicious WMI activity, such as unusual CIM instance creation or modification. Additionally, monitoring for abnormal PowerShell or `wbemtool. exe` usage can also help identify this type of attack.
+--------------------------------------------------
+Name:Malicious Shell Modification
+Summary:Adversaries may establish persistence through executing malicious commands triggered by a user’s shell. User shells execute several configuration scripts at different points throughout the session based on events. For example, when a user opens a command line interface or remotely logs in (such as SSH) a login shell is initiated. The login shell executes scripts from the system (/etc) and the user’s home directory (~/) to configure the environment. All login shells on a system use <code>/etc/profile</code> when initiated. These configuration scripts run at the permission level of their directory and are often used to set environment variables, create aliases, and customize the user’s environment. When the shell exits or terminates, additional shell scripts are executed to ensure the shell exits appropriately. 
+
+Adversaries may attempt to establish persistence by inserting commands into scripts automatically executed by shells. Using bash as an example, the default shell for most GNU/Linux systems, adversaries may add commands that launch malicious binaries into the <code>/etc/profile</code> and <code>/etc/profile.d</code> files (Citation: intezer-kaiji-malware). These files require root permissions and are executed each time any shell on a system launches. For user level permissions, adversaries can insert malicious commands into <code>~/.bash_profile</code>, <code>~/.bash_login</code>, or <code>~/.profile</code> (Rocke) which are sourced when a user opens a command line interface or connects remotely. Adversaries often use ~/.bash_profile since the system only executes the first file that exists in the listed order. Adversaries have also leveraged the <code>~/.bashrc</code> file (Tsunami, Rocke, Linux Rabbit, Magento) which is additionally executed if the connection is established remotely or an additional interactive shell is opened, such as a new tab in the command line interface. Some malware targets the termination of a program to trigger execution (Cannon), adversaries can use the <code>~/.bash_logout</code> file to execute malicious commands at the end of a session(Pearl_shellbot). 
+
+For macOS, the functionality of this technique is similar but leverages zsh, the default shell for macOS 10.15+. When the Terminal.app is opened, the application launches a zsh login shell and a zsh interactive shell. The login shell configures the system environment using <code>/etc/profile</code>, <code>/etc/zshenv</code>, <code>/etc/zprofile</code>, and <code>/etc/zlogin</code>. The login shell then configures the user environment with <code>~/.zprofile</code> and <code>~/.zlogin</code>. The interactive shell uses the <code>~/.zshrc<code> to configure the user environment. Upon exiting, <code>/etc/zlogout</code> and <code>~/.zlogout</code> are executed. For legacy programs, macOS executes <code>/etc/bashrc</code> on startup.
+Example Scenario and TTP Chain:**Example Scenario:**
+
+An attacker has compromised a Linux-based server using a vulnerability in the Apache Struts framework (CVE-2017-5638). The attacker has gained shell access as the "root" user and wants to maintain persistence on the system.
+
+**TTP Chain:**
+
+1. **Initial Access:** The attacker uses the compromised Apache Struts server to execute a payload that spawns a reverse shell connection back to their command and control (C2) server.
+2. **Persistence:** To establish persistence, the attacker modifies the `/etc/profile` file on the Linux system to include a malicious command that launches a custom binary (`/bin/malicious_binary`) when any shell is launched.
+
+**TTP Chain:**
+
+1. Initial Access: The attacker uses the compromised Apache Struts server to execute a payload that spawns a reverse shell connection back to their C2 server.
+2. Malicious Shell Modification:
+	* The attacker modifies the `/etc/profile` file on the Linux system to include a malicious command that launches `malicious_binary`.
+	* When any shell is launched (e.g., when a user opens a command line interface or remotely logs in), the modified `/etc/profile` file runs the malicious command, which executes `malicious_binary`.
+3. Command and Control:
+	* The attacker uses the reverse shell connection to send commands to the compromised system.
+	* The custom binary (`/bin/malicious_binary`) is executed, allowing the attacker to maintain persistence on the system.
+
+**Additional TTPs:**
+
+1. **Lateral Movement:** The attacker may use the compromised system as a pivot point to move laterally within the network, exploiting other vulnerabilities or using credentials stolen from other systems.
+2. **Exfiltration:** The attacker may exfiltrate sensitive data from the compromised system or other systems on the network, using techniques such as file transfer or network traffic capture.
+
+**Detection and Mitigation:**
+
+* Monitor for unusual modifications to shell configuration files (e.g., `/etc/profile`, `~/.bash_profile`).
+* Analyze system logs for suspicious login activity or command execution.
+* Implement security controls to prevent unauthorized access to sensitive files and directories.
+* Regularly update and patch systems to prevent exploitation of known vulnerabilities.
+
+By establishing persistence through malicious shell modifications, the attacker can maintain a foothold on the compromised system, allowing them to execute further attacks and maintain control over the network.
+--------------------------------------------------
+Name:Fileless Storage
+Summary:Adversaries may store data in "fileless" formats to conceal malicious activity from defenses. Fileless storage can be broadly defined as any format other than a file. Common examples of non-volatile fileless storage include the Windows Registry, event logs, or WMI repository.(Citation: Microsoft Fileless)(Citation: SecureList Fileless)
+
+Similar to fileless in-memory behaviors such as [Reflective Code Loading](https://attack.mitre.org/techniques/T1620) and [Process Injection](https://attack.mitre.org/techniques/T1055), fileless data storage may remain undetected by anti-virus and other endpoint security tools that can only access specific file formats from disk storage.
+
+Adversaries may use fileless storage to conceal various types of stored data, including payloads/shellcode (potentially being used as part of [Persistence](https://attack.mitre.org/tactics/TA0003)) and collected data not yet exfiltrated from the victim (e.g., [Local Data Staging](https://attack.mitre.org/techniques/T1074/001)). Adversaries also often encrypt, encode, splice, or otherwise obfuscate this fileless data when stored.
+
+Some forms of fileless storage activity may indirectly create artifacts in the file system, but in central and otherwise difficult to inspect formats such as the WMI (e.g., `%SystemRoot%\System32\Wbem\Repository`) or Registry (e.g., `%SystemRoot%\System32\Config`) physical files.(Citation: Microsoft Fileless) 
+Example Scenario and TTP Chain:Here's an example scenario and TTP (Tactics, Techniques, and Procedures) chain demonstrating the use of fileless storage:
+
+**Scenario:** A highly targeted attack is launched against a financial institution to steal sensitive customer data. The attackers aim to remain undetected for as long as possible, making it essential to utilize fileless storage techniques.
+
+**Initial Access:** An attacker sends a spear-phishing email to a mid-level employee with access to the company's network, exploiting a recently patched vulnerability in Microsoft Office (T1190 - Spearphishing via Malicious Attachment). The employee opens the attachment, allowing the attacker to gain initial access to the network.
+
+**Persistence:** To maintain persistence on the victim's system, the attacker uses fileless storage to store shellcode and payloads in the Windows Registry (T1628 - Fileless Persistence) under a legitimate-looking key. This approach allows the attackers to avoid creating suspicious files or registry entries that might be detected by security software.
+
+**Command and Control:** The attacker establishes command and control communication with the compromised system using fileless storage techniques, such as storing C2 data in the Windows Management Instrumentation (WMI) repository (T1041 - Network Traffic Analysis). This allows the attackers to exfiltrate stolen data or receive new instructions without creating suspicious network traffic patterns.
+
+**Exfiltration:** To steal sensitive customer data, the attacker uses fileless storage to collect and store the data in an encrypted format within the WMI repository. The data is then exfiltrated to an external server using a legitimate-looking Windows service (T1560 - Asymmetric Cryptography).
+
+**Coverage:** To avoid detection by security software, the attackers use various techniques to conceal their fileless storage activities:
+
+1. **Registry obfuscation**: The attackers store registry keys and values under seemingly innocuous names, making it difficult for security tools to detect.
+2. **WMI encryption**: The attackers encrypt WMI data using asymmetric cryptography (T1560), ensuring that even if the data is discovered, it remains inaccessible without the decryption key.
+3. **System service spoofing**: The attackers create a legitimate-looking Windows service that runs in the background, allowing them to exfiltrate stolen data without raising suspicions.
+
+**Detection:** To detect this fileless storage attack, security teams should focus on identifying unusual registry modifications, WMI repository changes, and encrypted data being stored or transmitted. Behavioral detection systems can also look for suspicious patterns of system service activity and network traffic analysis.
+
+This example scenario demonstrates how attackers can leverage fileless storage techniques to maintain persistence, establish command and control, and exfiltrate sensitive data while avoiding detection by traditional security controls.
+--------------------------------------------------
