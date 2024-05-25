@@ -1,0 +1,100 @@
+2024-02-01T04:22:48 - Successful user login from IP 192.168.1.10 - Normal
+2024-02-01T19:00:03 - Unauthorized access attempt to server XYZ - Suspicious
+2024-02-01T19:58:51 - Unauthorized access attempt to server XYZ - Suspicious
+2024-02-02T01:36:04 - Successful user login from IP 192.168.1.10 - Normal
+2024-02-02T18:04:14 - Successful user login from IP 192.168.1.10 - Normal
+2024-02-02T18:19:12 - Failed user login attempt from IP 192.168.1.15 - Suspicious
+2024-02-02T18:31:05 - Successful user login from IP 192.168.1.12 - Normal
+2024-02-02T22:26:23 - Malware detected on workstation ABC - Suspicious
+2024-02-03T02:41:11 - Malware detected on workstation ABC - Suspicious
+2024-02-03T09:06:19 - Failed user login attempt from IP 192.168.1.15 - Suspicious
+2024-02-03T09:13:27 - Unexpected shutdown of server XYZ - Suspicious
+2024-02-04T03:29:33 - Malware detected on workstation ABC - Suspicious
+2024-02-04T16:18:47 - Failed user login attempt from IP 192.168.1.15 - Suspicious
+2024-02-04T17:28:35 - Data exfiltration attempt detected from IP 198.51.100.25 - Suspicious
+2024-02-04T21:01:18 - Data exfiltration attempt detected from IP 198.51.100.25 - Suspicious
+2024-02-05T03:48:24 - Successful user login from IP 192.168.1.10 - Normal
+2024-02-05T03:57:12 - Failed user login attempt from IP 192.168.1.18 - Suspicious
+2024-02-05T06:54:39 - Unauthorized access attempt to server XYZ - Suspicious
+2024-02-05T08:52:02 - Malware detected on workstation ABC - Suspicious
+2024-02-05T10:05:01 - High traffic detected from IP 203.0.113.5 - Suspicious
+2024-02-05T11:01:43 - Failed user login attempt from IP 192.168.1.15 - Suspicious
+2024-02-06T01:42:50 - Unauthorized modification of critical file /etc/passwd - Suspicious
+2024-02-06T04:48:57 - Failed user login attempt from IP 192.168.1.15 - Suspicious
+2024-02-06T07:32:46 - Unexpected shutdown of server XYZ - Suspicious
+2024-02-07T04:49:39 - Failed user login attempt from IP 192.168.1.18 - Suspicious
+2024-02-07T05:56:43 - Successful user login from IP 192.168.1.12 - Normal
+2024-02-07T08:34:46 - Successful user login from IP 192.168.1.12 - Normal
+2024-02-07T14:51:02 - Failed user login attempt from IP 192.168.1.15 - Suspicious
+2024-02-09T01:31:58 - Data exfiltration attempt detected from IP 198.51.100.25 - Suspicious
+2024-02-09T07:45:07 - Unauthorized access attempt to server XYZ - Suspicious
+2024-02-09T17:28:50 - High traffic detected from IP 203.0.113.5 - Suspicious
+2024-02-09T19:18:43 - High traffic detected from IP 203.0.113.5 - Suspicious
+2024-02-09T20:15:27 - Successful user login from IP 192.168.1.10 - Normal
+2024-02-10T12:13:49 - Failed user login attempt from IP 192.168.1.15 - Suspicious
+2024-02-10T16:16:36 - Successful user login from IP 192.168.1.10 - Normal
+2024-02-10T22:37:19 - Failed user login attempt from IP 192.168.1.18 - Suspicious
+2024-02-11T00:26:53 - Failed user login attempt from IP 192.168.1.15 - Suspicious
+2024-02-11T02:19:03 - Successful user login from IP 192.168.1.12 - Normal
+2024-02-11T05:25:50 - Failed user login attempt from IP 192.168.1.15 - Suspicious
+2024-02-11T11:39:26 - Failed user login attempt from IP 192.168.1.15 - Suspicious
+2024-02-11T15:46:56 - Unauthorized modification of critical file /etc/passwd - Suspicious
+2024-02-11T20:55:52 - Malware detected on workstation ABC - Suspicious
+2024-02-12T06:39:21 - Successful user login from IP 192.168.1.10 - Normal
+2024-02-12T23:47:04 - Unauthorized modification of critical file /etc/passwd - Suspicious
+2024-02-13T05:49:53 - Malware detected on workstation ABC - Suspicious
+2024-02-14T22:17:17 - Unexpected shutdown of server XYZ - Suspicious
+2024-02-16T06:19:50 - Data exfiltration attempt detected from IP 198.51.100.25 - Suspicious
+2024-02-16T06:40:07 - High traffic detected from IP 203.0.113.5 - Suspicious
+2024-02-16T18:50:59 - Malware detected on workstation ABC - Suspicious
+2024-02-16T21:56:05 - Successful user login from IP 192.168.1.12 - Normal
+2024-02-17T02:51:59 - Successful user login from IP 192.168.1.10 - Normal
+2024-02-17T05:59:37 - Data exfiltration attempt detected from IP 198.51.100.25 - Suspicious
+2024-02-17T10:06:33 - Data exfiltration attempt detected from IP 198.51.100.25 - Suspicious
+2024-02-17T15:59:04 - Failed user login attempt from IP 192.168.1.18 - Suspicious
+2024-02-18T04:31:04 - Unexpected shutdown of server XYZ - Suspicious
+2024-02-18T08:38:44 - Failed user login attempt from IP 192.168.1.15 - Suspicious
+2024-02-18T09:09:45 - Successful user login from IP 192.168.1.12 - Normal
+2024-02-18T15:18:30 - Successful user login from IP 192.168.1.10 - Normal
+2024-02-18T16:43:17 - Successful user login from IP 192.168.1.12 - Normal
+2024-02-19T21:12:34 - Unexpected shutdown of server XYZ - Suspicious
+2024-02-20T03:00:45 - Unauthorized modification of critical file /etc/passwd - Suspicious
+2024-02-20T09:22:33 - Successful user login from IP 192.168.1.12 - Normal
+2024-02-20T16:27:47 - High traffic detected from IP 203.0.113.5 - Suspicious
+2024-02-20T16:54:02 - Unauthorized access attempt to server XYZ - Suspicious
+2024-02-20T17:45:14 - Failed user login attempt from IP 192.168.1.15 - Suspicious
+2024-02-20T22:27:36 - Failed user login attempt from IP 192.168.1.15 - Suspicious
+2024-02-21T14:16:12 - Unauthorized access attempt to server XYZ - Suspicious
+2024-02-22T05:47:31 - Failed user login attempt from IP 192.168.1.15 - Suspicious
+2024-02-22T09:07:20 - Data exfiltration attempt detected from IP 198.51.100.25 - Suspicious
+2024-02-22T09:44:05 - Unauthorized modification of critical file /etc/passwd - Suspicious
+2024-02-22T13:37:57 - Data exfiltration attempt detected from IP 198.51.100.25 - Suspicious
+2024-02-23T07:46:07 - Failed user login attempt from IP 192.168.1.18 - Suspicious
+2024-02-23T08:20:31 - Failed user login attempt from IP 192.168.1.15 - Suspicious
+2024-02-24T01:47:38 - Failed user login attempt from IP 192.168.1.15 - Suspicious
+2024-02-24T05:49:11 - Successful user login from IP 192.168.1.12 - Normal
+2024-02-24T17:34:03 - Successful user login from IP 192.168.1.10 - Normal
+2024-02-24T18:58:18 - Unauthorized access attempt to server XYZ - Suspicious
+2024-02-25T09:59:34 - Unauthorized access attempt to server XYZ - Suspicious
+2024-02-25T12:36:45 - Data exfiltration attempt detected from IP 198.51.100.25 - Suspicious
+2024-02-25T16:42:05 - Data exfiltration attempt detected from IP 198.51.100.25 - Suspicious
+2024-02-25T21:09:59 - Failed user login attempt from IP 192.168.1.18 - Suspicious
+2024-02-25T22:54:25 - Successful user login from IP 192.168.1.10 - Normal
+2024-02-26T02:54:47 - Unauthorized access attempt to server XYZ - Suspicious
+2024-02-26T06:05:48 - Malware detected on workstation ABC - Suspicious
+2024-02-26T12:05:42 - Unauthorized access attempt to server XYZ - Suspicious
+2024-02-26T16:55:02 - Successful user login from IP 192.168.1.10 - Normal
+2024-02-26T19:24:36 - High traffic detected from IP 203.0.113.5 - Suspicious
+2024-02-27T03:46:11 - Unexpected shutdown of server XYZ - Suspicious
+2024-02-27T13:21:26 - Unauthorized modification of critical file /etc/passwd - Suspicious
+2024-02-27T19:52:23 - Failed user login attempt from IP 192.168.1.15 - Suspicious
+2024-02-27T20:47:55 - Unauthorized modification of critical file /etc/passwd - Suspicious
+2024-02-27T20:54:54 - Unexpected shutdown of server XYZ - Suspicious
+2024-02-28T00:40:12 - Failed user login attempt from IP 192.168.1.15 - Suspicious
+2024-02-28T03:12:42 - High traffic detected from IP 203.0.113.5 - Suspicious
+2024-02-28T05:40:06 - Successful user login from IP 192.168.1.12 - Normal
+2024-02-28T07:06:28 - Failed user login attempt from IP 192.168.1.15 - Suspicious
+2024-02-28T07:49:55 - Unauthorized modification of critical file /etc/passwd - Suspicious
+2024-02-28T09:51:43 - Failed user login attempt from IP 192.168.1.18 - Suspicious
+2024-02-28T11:16:29 - Successful user login from IP 192.168.1.12 - Normal
+2024-02-28T13:32:53 - Unauthorized access attempt to server XYZ - Suspicious
